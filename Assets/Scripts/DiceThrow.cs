@@ -5,104 +5,111 @@ using UnityEngine;
 public class DiceThrow : MonoBehaviour
 {
     private Rigidbody diceRb;
-
     private float throwForceX;
     private float throwForceY;
     private float throwForceZ;
-
     private float torqueForceX;
     private float torqueForceY;
     private float torqueForceZ;
+    private Vector3 throwForceVec;
+    private Vector3 torqueForceVec;
     private float tolerance = 10.0f;
-
+    private float minForceValue = 8.0f;
+    private float maxForceValue = 16.0f;
+    private float minTorqueValue = 0.2f;
+    private float maxTorqueValue = 2.0f;
     private bool onGround = false;
     private bool wrongLanded = false;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         diceRb = GetComponent<Rigidbody>();
-    }
+    }// Start
 
-    // Update is called once per frame
+
     void Update()
     {
-        //Random values of throw and torque
-        throwForceX = Random.Range(Random.Range(-16.0f, -8.0f), Random.Range(8.0f, 16.0f));
-        throwForceY = Random.Range(8.0f, 16.0f);
-        throwForceZ = Random.Range(Random.Range(-16.0f, -8.0f), Random.Range(8.0f, 16.0f));
+        if (Input.GetKeyDown(KeyCode.Space) || wrongLanded)
+        {
+            CreateRandomVectors();
+            ThrowDice();
+        }
+    }// Update
 
-        torqueForceX = Random.Range(Random.Range(-2.0f, -0.2f), Random.Range(0.2f, 2f));
-        torqueForceY = Random.Range(Random.Range(-2.0f, -0.2f), Random.Range(0.2f, 2f));
-        torqueForceZ = Random.Range(Random.Range(-2.0f, -0.2f), Random.Range(0.2f, 2f));
-
-        ThrowDice();
-    }
 
     private void FixedUpdate()
     {
         if (diceRb.IsSleeping() && onGround)
         {
-            //Debug.Log("Dice is sleeping on ground");
             CheckDice();
         }
+    }// Fixed Update
+
+
+    private void CreateRandomVectors()
+    {
+        // Random values of force
+        throwForceX = Random.Range(Random.Range(-maxForceValue, -minForceValue), Random.Range(minForceValue, maxForceValue));
+        throwForceY = Random.Range(minForceValue, maxForceValue);
+        throwForceZ = Random.Range(Random.Range(-maxForceValue, -minForceValue), Random.Range(minForceValue, maxForceValue));
+
+        // Random values of torque
+        torqueForceX = Random.Range(Random.Range(-maxTorqueValue, -minTorqueValue), Random.Range(minTorqueValue, maxTorqueValue));
+        torqueForceY = Random.Range(Random.Range(-maxTorqueValue, -minTorqueValue), Random.Range(minTorqueValue, maxTorqueValue));
+        torqueForceZ = Random.Range(Random.Range(-maxTorqueValue, -minTorqueValue), Random.Range(minTorqueValue, maxTorqueValue));
+
+        // Random vectors of force and torque
+        throwForceVec = new Vector3(throwForceX, throwForceY, throwForceZ);
+        torqueForceVec = new Vector3(torqueForceX, torqueForceY, torqueForceZ);
     }
+
 
     public void ThrowDice()
     {
-        //Random vectors of force and torque
-        Vector3 throwForceVec = new Vector3(throwForceX, throwForceY, throwForceZ);
-        Vector3 torqueForceVec = new Vector3(torqueForceX, torqueForceY, torqueForceZ);
+        diceRb.AddForce(throwForceVec, ForceMode.Impulse);
+        diceRb.AddTorque(torqueForceVec, ForceMode.Impulse);
 
-        if (Input.GetKeyDown(KeyCode.Space) || wrongLanded)
-        {
-            diceRb.AddForce(throwForceVec, ForceMode.Impulse);
-            diceRb.AddTorque(torqueForceVec, ForceMode.Impulse);
-            //Debug.Log("torque = " + torqueForceVec);
-            //Debug.Log("throw = " + throwForceVec);
-            wrongLanded = false;
-        }
-    }
+        wrongLanded = false;
+    }// ThrowDice
+
 
     public void CheckDice()
     {
-
+        // Checking the dice which face is up
         Vector3 eulerAngles = transform.eulerAngles;
-        //Debug.Log(eulerAngles);
 
-        // zarın yukarı baktığı yüzeyin belirlenmesi
         if (-tolerance < eulerAngles.x && eulerAngles.x < tolerance && 180.0f - tolerance < eulerAngles.z && eulerAngles.z < 180.0f + tolerance)
         {
-            Debug.Log("Zar yüzeyi 1 yukarıda");
+            // Face 1 is up
         }
         else if (-tolerance < eulerAngles.x && eulerAngles.x < tolerance && (270.0f - tolerance < eulerAngles.z && eulerAngles.z < 270.0f + tolerance))
         {
-            Debug.Log("Zar yüzeyi 2 yukarıda");
+            // Face 2 is up
         }
         else if (270.0f - tolerance < eulerAngles.x && eulerAngles.x < 270.0f + tolerance && -tolerance < eulerAngles.z && eulerAngles.z < tolerance)
         {
-            Debug.Log("Zar yüzeyi 3 yukarıda");
+            // Face 3 is up
         }
         else if (90.0f - tolerance < eulerAngles.x && eulerAngles.x < 90.0f + tolerance && -tolerance < eulerAngles.z && eulerAngles.z < tolerance)
         {
-            Debug.Log("Zar yüzeyi 4 yukarıda");
+            // Face 4 is up
         }
         else if (-tolerance < eulerAngles.x && eulerAngles.x < tolerance && 90.0f - tolerance < eulerAngles.z && eulerAngles.z < 90.0f + tolerance)
         {
-            Debug.Log("Zar yüzeyi 5 yukarıda");
+            // Face 5 is up
         }
         else if (-tolerance < eulerAngles.x && eulerAngles.x < tolerance && -tolerance < eulerAngles.z && eulerAngles.z < tolerance)
         {
-            Debug.Log("Zar yüzeyi 6 yukarıda");
+            // Face 6 is up
         }
         else
         {
-            //wrongLanded = true;
-            Debug.Log("Landed wrongly");
-            Debug.Log(eulerAngles);
-            Debug.Log("x = " + eulerAngles.x + "y = " + eulerAngles.y + "z = " + eulerAngles.z);
+            // The dice did not correctly landed
+            wrongLanded = true;
         }
-    }
+    }// CheckDice
+
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -110,6 +117,7 @@ public class DiceThrow : MonoBehaviour
         {
             onGround = true;
         }
-    }
+    }// OnCollusionEnter
 
-}
+
+}// Class
