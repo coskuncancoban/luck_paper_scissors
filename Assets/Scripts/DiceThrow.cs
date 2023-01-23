@@ -5,6 +5,7 @@ using UnityEngine;
 public class DiceThrow : MonoBehaviour
 {
     private Rigidbody diceRb;
+    public GameObject dicePrefab;
     private float throwForceX;
     private float throwForceY;
     private float throwForceZ;
@@ -13,6 +14,7 @@ public class DiceThrow : MonoBehaviour
     private float torqueForceZ;
     private Vector3 throwForceVec;
     private Vector3 torqueForceVec;
+    private int upFace = 0;
     private float tolerance = 10.0f;
     private float minForceValue = 8.0f;
     private float maxForceValue = 16.0f;
@@ -20,6 +22,7 @@ public class DiceThrow : MonoBehaviour
     private float maxTorqueValue = 2.0f;
     private bool onGround = false;
     private bool wrongLanded = false;
+    private bool diceThrowed = false;
 
 
     void Start()
@@ -40,9 +43,16 @@ public class DiceThrow : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (diceRb.IsSleeping() && onGround)
+        if (diceRb.IsSleeping() && onGround && diceThrowed)
         {
             CheckDice();
+            diceThrowed = false;
+        }
+
+        if (upFace != 0)
+        {
+            InstantiateDice();
+            upFace = 0;
         }
     }// Fixed Update
 
@@ -69,6 +79,7 @@ public class DiceThrow : MonoBehaviour
     {
         diceRb.AddForce(throwForceVec, ForceMode.Impulse);
         diceRb.AddTorque(torqueForceVec, ForceMode.Impulse);
+        diceThrowed = true;
 
         wrongLanded = false;
     }// ThrowDice
@@ -81,27 +92,33 @@ public class DiceThrow : MonoBehaviour
 
         if (-tolerance < eulerAngles.x && eulerAngles.x < tolerance && 180.0f - tolerance < eulerAngles.z && eulerAngles.z < 180.0f + tolerance)
         {
-            // Face 1 is up
+            upFace = 1;
+            Debug.Log("Face 1 is up");
         }
         else if (-tolerance < eulerAngles.x && eulerAngles.x < tolerance && (270.0f - tolerance < eulerAngles.z && eulerAngles.z < 270.0f + tolerance))
         {
-            // Face 2 is up
+            upFace = 2;
+            Debug.Log("Face 2 is up");
         }
         else if (270.0f - tolerance < eulerAngles.x && eulerAngles.x < 270.0f + tolerance && -tolerance < eulerAngles.z && eulerAngles.z < tolerance)
         {
-            // Face 3 is up
+            upFace = 3;
+            Debug.Log("Face 3 is up");
         }
         else if (90.0f - tolerance < eulerAngles.x && eulerAngles.x < 90.0f + tolerance && -tolerance < eulerAngles.z && eulerAngles.z < tolerance)
         {
-            // Face 4 is up
+            upFace = 4;
+            Debug.Log("Face 4 is up");
         }
         else if (-tolerance < eulerAngles.x && eulerAngles.x < tolerance && 90.0f - tolerance < eulerAngles.z && eulerAngles.z < 90.0f + tolerance)
         {
-            // Face 5 is up
+            upFace = 5;
+            Debug.Log("Face 5 is up");
         }
         else if (-tolerance < eulerAngles.x && eulerAngles.x < tolerance && -tolerance < eulerAngles.z && eulerAngles.z < tolerance)
         {
-            // Face 6 is up
+            upFace = 6;
+            Debug.Log("Face 6 is up");
         }
         else
         {
@@ -118,6 +135,19 @@ public class DiceThrow : MonoBehaviour
             onGround = true;
         }
     }// OnCollusionEnter
+
+
+    private void InstantiateDice()
+    {
+        for (int i = 0; i < upFace; i++)
+        {
+            GameObject secondaryDice = Instantiate(dicePrefab, gameObject.transform.position, Quaternion.identity);
+            Rigidbody secondaryDiceRb = secondaryDice.GetComponent<Rigidbody>();
+            secondaryDiceRb.AddForce(throwForceVec, ForceMode.Impulse);
+            secondaryDiceRb.AddTorque(torqueForceVec, ForceMode.Impulse);
+        }
+        diceThrowed = false;
+    }
 
 
 }// Class
