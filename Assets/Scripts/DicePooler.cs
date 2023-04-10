@@ -16,58 +16,37 @@ public class DicePooler : MonoBehaviour
             public string tag;
             public GameObject prefab;
             public int size;
-        }
-    }
+        }//DiceModel
+    }//DiceType
     public List<DiceType> diceTypes;
-    //public Dictionary<string, Queue<GameObject>> poolDictionary;
-
-
-    public Queue<GameObject> dicePool;
-
+    private Queue<GameObject> _dicePool;
+    private DiceManager _diceManagerScript;
 
 
     private void Start()
     {
-        //poolDictionary = new Dictionary<string, Queue<GameObject>>();
+        _diceManagerScript = gameObject.GetComponent<DiceManager>();
+        
+        // find the chosen dice type
+        DiceType type = diceTypes.Find(d => d.tag == _diceManagerScript.chosenDiceType);
 
-        // seçilen tag'a sahip DiceType'ı bulunur
-        DiceType type = diceTypes.Find(d => d.tag == DiceManager.chosenDiceType);
+        // find the chosen dice model
+        DiceType.DiceModel pool = type.models.Find(p => p.tag == _diceManagerScript.chosenDice);
 
-        // seçilen tag'a sahip DiceModel'i bulunur
-        DiceType.DiceModel pool = type.models.Find(p => p.tag == DiceManager.chosenDice);
-
-        // DiceModel'dan prefab kullanılarak GameObject'ler initiate edilir ve queue'ya eklenir
-        dicePool = new Queue<GameObject>();
+        // create the dice pool
+        _dicePool = new Queue<GameObject>();
         for (int i = 0; i < pool.size; i++)
         {
             GameObject obj = Instantiate(pool.prefab, transform);
             obj.SetActive(false);
-            dicePool.Enqueue(obj);
+            _dicePool.Enqueue(obj);
         }
-
-        // queue, poolDictionary'e eklenir
-        //poolDictionary.Add(pool.tag, dicePool);
-    }
-
-
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            GameObject dice = GetPooledDice();
-            dice.transform.position = Vector3.zero;
-            dice.transform.rotation = Quaternion.identity;
-            dice.SetActive(true);
-        }
-    }
+    }//Start
 
 
     public GameObject GetPooledDice()
     {
-        
-        GameObject dice = dicePool.Dequeue();
-
+        GameObject dice = _dicePool.Dequeue();
         return dice;
-    }
-
-
-}// class
+    }//GetPooledDice
+}//Class

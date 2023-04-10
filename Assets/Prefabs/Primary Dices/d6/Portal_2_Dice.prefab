@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5012716622589223315}
   - component: {fileID: 2720108313481360049}
   - component: {fileID: -524792446249208401}
-  - component: {fileID: 708922561}
+  - component: {fileID: 7452489209892153433}
   m_Layer: 0
   m_Name: Portal_2_Dice
   m_TagString: d6
@@ -147,8 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wrongLanded: 0
-  isChecked: 0
---- !u!114 &708922561
+--- !u!114 &7452489209892153433
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,4 +159,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d57e48f7c2440548872a5f9e15ae142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dicePoolerScript: {fileID: 0}
