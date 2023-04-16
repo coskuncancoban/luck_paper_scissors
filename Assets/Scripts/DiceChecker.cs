@@ -4,81 +4,62 @@ using UnityEngine;
 
 public class DiceChecker : MonoBehaviour
 {
-    private Rigidbody diceRb;
-    private float tolerance = 10.0f;
-    public static int upFace = 0;
-    private bool onGround = false;
+    private float _tolerance = 10.0f;
+    public int upFace;
     public bool wrongLanded = false;
-    private DiceManager diceManagerScript;
+    private GameManager _gameManagerScript;
 
-
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        diceManagerScript = GameObject.Find("DiceManager").GetComponent<DiceManager>();;
-        diceRb = GetComponent<Rigidbody>();
-    }// Start
+        _gameManagerScript = GameManager.Instance;
+    }
 
 
-    private void Update()
+    public void CheckDice()
     {
-        // Checks the Dice if sleeping and onGround
-        if (diceRb.IsSleeping() && onGround && !diceManagerScript.isChecked)
-        {
-            Debug.Log("Dice is sleeping and on ground");
-            CheckTheDices();
-        }
-    }// FixedUpdate
-
-
-    public void CheckTheDices()
-    {
-
-        // Checking the dice which face is up
         Vector3 eulerAngles = transform.eulerAngles;
 
-        switch (diceManagerScript.chosenDiceType)
+        switch (_gameManagerScript.chosenDiceType)
         {
             case "d4":
 
                 break;
 
             case "d6":
-                if (-tolerance < eulerAngles.x && eulerAngles.x < tolerance && 180.0f - tolerance < eulerAngles.z && eulerAngles.z < 180.0f + tolerance)
+                if (-_tolerance < eulerAngles.x && eulerAngles.x < _tolerance && 180.0f - _tolerance < eulerAngles.z && eulerAngles.z < 180.0f + _tolerance)
                 {
-                    diceManagerScript.upFace = 1;
+                    upFace = 1;
                     Debug.Log("Face 1 is up");
                 }
-                else if (-tolerance < eulerAngles.x && eulerAngles.x < tolerance && (270.0f - tolerance < eulerAngles.z && eulerAngles.z < 270.0f + tolerance))
+                else if (-_tolerance < eulerAngles.x && eulerAngles.x < _tolerance && (270.0f - _tolerance < eulerAngles.z && eulerAngles.z < 270.0f + _tolerance))
                 {
-                    diceManagerScript.upFace = 2;
+                    upFace = 2;
                     Debug.Log("Face 2 is up");
                 }
-                else if (270.0f - tolerance < eulerAngles.x && eulerAngles.x < 270.0f + tolerance && -tolerance < eulerAngles.z && eulerAngles.z < tolerance)
+                else if (270.0f - _tolerance < eulerAngles.x && eulerAngles.x < 270.0f + _tolerance && -_tolerance < eulerAngles.z && eulerAngles.z < _tolerance)
                 {
-                    diceManagerScript.upFace = 3;
+                    upFace = 3;
                     Debug.Log("Face 3 is up");
                 }
-                else if (90.0f - tolerance < eulerAngles.x && eulerAngles.x < 90.0f + tolerance && -tolerance < eulerAngles.z && eulerAngles.z < tolerance)
+                else if (90.0f - _tolerance < eulerAngles.x && eulerAngles.x < 90.0f + _tolerance && -_tolerance < eulerAngles.z && eulerAngles.z < _tolerance)
                 {
-                    diceManagerScript.upFace = 4;
+                    upFace = 4;
                     Debug.Log("Face 4 is up");
                 }
-                else if (-tolerance < eulerAngles.x && eulerAngles.x < tolerance && 90.0f - tolerance < eulerAngles.z && eulerAngles.z < 90.0f + tolerance)
+                else if (-_tolerance < eulerAngles.x && eulerAngles.x < _tolerance && 90.0f - _tolerance < eulerAngles.z && eulerAngles.z < 90.0f + _tolerance)
                 {
-                    diceManagerScript.upFace = 5;
+                    upFace = 5;
                     Debug.Log("Face 5 is up");
                 }
-                else if (-tolerance < eulerAngles.x && eulerAngles.x < tolerance && -tolerance < eulerAngles.z && eulerAngles.z < tolerance)
+                else if (-_tolerance < eulerAngles.x && eulerAngles.x < _tolerance && -_tolerance < eulerAngles.z && eulerAngles.z < _tolerance)
                 {
-                    diceManagerScript.upFace = 6;
+                    upFace = 6;
                     Debug.Log("Face 6 is up");
                 }
                 else
                 {
-                    // The dice did not correctly landed
-                    diceManagerScript.wrongLanded = true;
+                    Debug.Log("The dice did not correctly landed");
+                    wrongLanded = true;
                 }
 
                 break;
@@ -103,22 +84,6 @@ public class DiceChecker : MonoBehaviour
             default:
                 Debug.Log("Something went wrong. The dice does not have any 'dice type'.");
                 break;
-
         }
-
-        Debug.Log("Zar Kontrol Edildi");
-        diceManagerScript.isChecked = true;
     }//CheckDice
-
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground") && diceManagerScript.isThrowed )
-        {
-            onGround = true;
-        }
-    }// OnCollusionEnter
-
-
-
-}
+}//Class

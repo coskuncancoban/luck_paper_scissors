@@ -4,60 +4,36 @@ using UnityEngine;
 
 public class DiceThrower : MonoBehaviour
 {
-    private Vector3 throwForceVec;
-    private Vector3 torqueForceVec;
-    private float minForceValue = 8.0f;
-    private float maxForceValue = 16.0f;
-    private float minTorqueValue = 0.2f;
-    private float maxTorqueValue = 2.0f;
-    private DiceManager diceManagerScript;
-
-    private void OnEnable()
-    {
-        diceManagerScript = GameObject.Find("DiceManager").GetComponent<DiceManager>();
-        if(diceManagerScript.isThrowed)
-        {
-            ThrowDice();
-        }
-    }
+    private Vector3 _throwForceVec;
+    private Vector3 _torqueForceVec;
+    private float _minForceValue = 8.0f;
+    private float _maxForceValue = 16.0f;
+    private float _minTorqueValue = 0.2f;
+    private float _maxTorqueValue = 2.0f;
 
 
-    void Update()
-    {
-        // throws the dices when press Space
-        if (diceManagerScript.wrongLanded || (Input.GetKeyDown(KeyCode.Space) && !diceManagerScript.isThrowed))
-        {
-            ThrowDice();
-            Debug.Log("Dice throwed");
-        }
-    }//Update
-
-
-    public void CreateRandomVectors()
+    private void CreateRandomVectors()
     {
         // random values of force
-        float throwForceX = Random.Range(Random.Range(-maxForceValue, -minForceValue), Random.Range(minForceValue, maxForceValue));
-        float throwForceY = Random.Range(minForceValue, maxForceValue);
-        float throwForceZ = Random.Range(Random.Range(-maxForceValue, -minForceValue), Random.Range(minForceValue, maxForceValue));
+        float throwForceX = Random.Range(Random.Range(-_maxForceValue, -_minForceValue), Random.Range(_minForceValue, _maxForceValue));
+        float throwForceY = Random.Range(_minForceValue, _maxForceValue);
+        float throwForceZ = Random.Range(Random.Range(-_maxForceValue, -_minForceValue), Random.Range(_minForceValue, _maxForceValue));
 
         // random values of torque
-        float torqueForceX = Random.Range(Random.Range(-maxTorqueValue, -minTorqueValue), Random.Range(minTorqueValue, maxTorqueValue));
-        float torqueForceY = Random.Range(Random.Range(-maxTorqueValue, -minTorqueValue), Random.Range(minTorqueValue, maxTorqueValue));
-        float torqueForceZ = Random.Range(Random.Range(-maxTorqueValue, -minTorqueValue), Random.Range(minTorqueValue, maxTorqueValue));
+        float torqueForceX = Random.Range(Random.Range(-_maxTorqueValue, -_minTorqueValue), Random.Range(_minTorqueValue, _maxTorqueValue));
+        float torqueForceY = Random.Range(Random.Range(-_maxTorqueValue, -_minTorqueValue), Random.Range(_minTorqueValue, _maxTorqueValue));
+        float torqueForceZ = Random.Range(Random.Range(-_maxTorqueValue, -_minTorqueValue), Random.Range(_minTorqueValue, _maxTorqueValue));
 
         // random vectors of force and torque
-        throwForceVec = new Vector3(throwForceX, throwForceY, throwForceZ);
-        torqueForceVec = new Vector3(torqueForceX, torqueForceY, torqueForceZ);
+        _throwForceVec = new Vector3(throwForceX, throwForceY, throwForceZ);
+        _torqueForceVec = new Vector3(torqueForceX, torqueForceY, torqueForceZ);
     }//CreateRandomVectors
 
 
     public void ThrowDice()
     {
         CreateRandomVectors();
-        Rigidbody diceRb = this.gameObject.GetComponent<Rigidbody>();
-        diceRb.AddForce(throwForceVec, ForceMode.Impulse);
-        diceRb.AddTorque(torqueForceVec, ForceMode.Impulse);
-        diceManagerScript.isThrowed = true;
+        gameObject.GetComponent<Rigidbody>().AddForce(_throwForceVec, ForceMode.Impulse);
+        gameObject.GetComponent<Rigidbody>().AddTorque(_torqueForceVec, ForceMode.Impulse);
     }//ThrowDice
-
 }//Class

@@ -13,11 +13,12 @@ GameObject:
   - component: {fileID: 5931569000066861044}
   - component: {fileID: 5012716622589223312}
   - component: {fileID: 5012716622589223315}
+  - component: {fileID: 7962922631499235961}
   - component: {fileID: 2720108313481360049}
   - component: {fileID: -524792446249208401}
-  - component: {fileID: 7452489209892153433}
+  - component: {fileID: -8039300242099240750}
   m_Layer: 0
-  m_Name: Portal_2_Dice
+  m_Name: p_portal
   m_TagString: d6
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122,6 +123,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.4, y: 1.4, z: 1.4}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7962922631499235961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5283240113145112097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3799bdb6f9decb14e9a5c36185944246, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2720108313481360049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,8 +159,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7014c429c06fb74f80d0b497bc5c05f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upFace: 0
   wrongLanded: 0
---- !u!114 &7452489209892153433
+--- !u!114 &-8039300242099240750
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,6 +170,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5283240113145112097}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d57e48f7c2440548872a5f9e15ae142, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a5184e3f87d7b141abe3aa1fac70679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
