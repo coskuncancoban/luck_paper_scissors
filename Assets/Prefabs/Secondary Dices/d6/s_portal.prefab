@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5385391900868855763}
   - component: {fileID: 8027923688775728687}
   - component: {fileID: 3630110319383083313}
+  - component: {fileID: -5916357618508201155}
   m_Layer: 0
   m_Name: s_portal
   m_TagString: d6
@@ -160,3 +161,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upFace: 0
   wrongLanded: 0
+--- !u!114 &-5916357618508201155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 254164150913395391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97dca44e45e7df146a79c0d0f84259ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinPrefab: {fileID: 6350636503569325196, guid: 6ad6e7a7e161d5843ae272dc87030084, type: 3}

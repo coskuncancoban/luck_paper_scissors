@@ -4,27 +4,30 @@ using UnityEngine;
 
 public class SecondaryDice : MonoBehaviour
 {
-    private bool _isThrown = false;
     private bool _isChecked = false;
     private Rigidbody _rb;
     private bool _onGround = false;
-    private void Start()
+    private bool _coin = false;
+
+
+
+    private void OnEnable()
     {
         GetComponent<DiceThrower>().ThrowDice();
-    }
+    }//OnEnable
 
 
 
     private void Update()
     {
-        // if the dice is thrown, sleeping and "not on ground", throw it again
-        if (_isThrown && GetComponent<Rigidbody>().IsSleeping() && !_onGround)
+        // if the dice is sleeping and "not on ground", throw it again
+        if (GetComponent<Rigidbody>().IsSleeping() && !_onGround)
         {
             GetComponent<DiceThrower>().ThrowDice();
         }
 
-        // if the dice is thrown, sleeping and on ground, check it
-        if (_isThrown && GetComponent<Rigidbody>().IsSleeping() && _onGround && !_isChecked)
+        // if the dice is sleeping and on ground, check it
+        if (GetComponent<Rigidbody>().IsSleeping() && _onGround && !_isChecked)
         {
             _isChecked = true;
             GetComponent<DiceChecker>().CheckDice();
@@ -36,6 +39,13 @@ public class SecondaryDice : MonoBehaviour
                 _isChecked = false;
                 GetComponent<DiceChecker>().wrongLanded = false;
             }
+        }
+
+        if (GetComponent<DiceChecker>().upFace != 0 && !_coin)
+        {
+            GetComponent<CoinInstantiater>().InstantiateCoin();
+            _coin = true;
+            Destroy(gameObject);
         }
     }
 

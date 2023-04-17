@@ -45,14 +45,23 @@ public class PrimaryDice : MonoBehaviour
 
         if (_isChecked && !_secondaryDices)
         {
-            int upFace = GetComponent<DiceChecker>().upFace;
-            for(int i = 0; i < upFace; i++)
-            {
-                GameObject dice = GetComponent<DiceInstantiater>().InstantiateDice();
-            }
+
+            StartCoroutine(InstantiateDice());
+
             _secondaryDices = true;
         }
     }//Update
+
+    IEnumerator InstantiateDice()
+    {
+        int upFace = GetComponent<DiceChecker>().upFace;
+        for (int i = 0; i < upFace; i++)
+        {
+            GameObject dice = GetComponent<DiceInstantiater>().InstantiateDice();
+            yield return new WaitForSeconds(0.12f);
+        }
+        Destroy(gameObject);
+    }//InstantiateDice
 
 
     private void OnCollisionEnter(Collision other)
